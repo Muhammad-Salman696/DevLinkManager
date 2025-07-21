@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
+import InviteModal from "@/pages/invite/invite";
 
 
 export default function ProjectCard({ project, onDelete }) {
     const [loading, setLoading] = useState(false);
+    const [ showInvite, setShowInvite] = useState(false);
 
     const handleDelete = async () => {
     setLoading(true);
@@ -27,7 +29,7 @@ export default function ProjectCard({ project, onDelete }) {
       <p className="text-sm text-gray-600">{project.description}</p>
       <div className="mt-2 flex gap-3">
         <Link href={`/projects/edit/${project.id}`}>
-          <button className="bg-yellow-500 text-white px-3 py-1 rounded">
+          <button className="bg-yellow-600 text-white px-3 py-1 rounded">
             Edit
           </button>
         </Link>
@@ -38,6 +40,13 @@ export default function ProjectCard({ project, onDelete }) {
         >
           {loading ? "Deleting..." : "Delete"}
         </button>
+        <button
+          onClick={() => setShowInvite(true)} // when clicked, show the form
+          className="bg-blue-600 text-white px-3 py-1 rounded"
+        >
+          Invite
+        </button>
+        {showInvite && (<InviteModal projectId={project.id} onClose={()=> setShowInvite(false)} projectName={project.title} />)}
       </div>
     </div>
   );
